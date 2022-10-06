@@ -1,15 +1,15 @@
 const {
   AllLaunches,
-  addNewLaunch,
   existsLaunchWithId,
   abortLaunchById,
+  scheduleLaunch,
 } = require("../../models/launch.model");
 
-function getAllLaunches(req, res) {
-  return res.status(200).json(AllLaunches());
+async function getAllLaunches(req, res) {
+  return res.status(200).json(await AllLaunches());
 }
 
-function httpAddNewLaunch(req, res) {
+async function httpAddNewLaunch(req, res) {
   const launch = req.body;
   if (
     !launch.mission ||
@@ -30,6 +30,7 @@ function httpAddNewLaunch(req, res) {
     });
   }
   addNewLaunch(launch);
+  await scheduleLaunch(launch);
   return res.status(201).json(launch);
 }
 
